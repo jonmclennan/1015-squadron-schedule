@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="1015 Sqn">
+<title>1015 (Horsham) Squadron — Training Schedule</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root {
+  --surface-0: #f5f5f3;
+  --surface-1: #eeede9;
+  --surface-2: #ffffff;
+  --border: rgba(0,0,0,0.12);
+  --border-strong: rgba(0,0,0,0.2);
+  --border-stronger: rgba(0,0,0,0.35);
+  --border-accent: #3b82f6;
+  --border-danger: #ef4444;
+  --text-primary: #1a1a18;
+  --text-secondary: #6b6b67;
+  --text-muted: #9a9a96;
+  --text-accent: #1d4ed8;
+  --text-danger: #dc2626;
+  --text-success: #16a34a;
+  --bg-accent: #eff6ff;
+  --bg-danger: #fef2f2;
+  --bg-success: #f0fdf4;
+  --radius: 8px;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-0: #1a1a18;
+    --surface-1: #252523;
+    --surface-2: #2e2e2b;
+    --border: rgba(255,255,255,0.1);
+    --border-strong: rgba(255,255,255,0.18);
+    --border-stronger: rgba(255,255,255,0.3);
+    --text-primary: #f0efe8;
+    --text-secondary: #a8a8a0;
+    --text-muted: #6e6e68;
+    --text-accent: #60a5fa;
+    --text-danger: #f87171;
+    --text-success: #4ade80;
+    --bg-accent: #1e3a5f;
+    --bg-danger: #3b1515;
+    --bg-success: #14301a;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--surface-0);color:var(--text-primary);min-height:100vh}
+.app{display:flex;flex-direction:column;min-height:100vh}
+.hdr{background:var(--surface-2);border-bottom:1px solid var(--border-strong);padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+.hdr-logo{background:#1a3a5c;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-title{font-size:16px;font-weight:600;color:var(--text-primary)}
+.hdr-sub{font-size:12px;color:var(--text-secondary);margin-top:1px}
+.hdr-acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.tabs{display:flex;gap:2px;padding:10px 16px 0;background:var(--surface-2);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch}
+.tab{padding:8px 16px;font-size:13px;border:1px solid transparent;border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;background:none;color:var(--text-secondary);white-space:nowrap;font-family:var(--font-sans)}
+.tab:hover{background:var(--surface-1);color:var(--text-primary)}
+.tab.active{background:var(--surface-0);border-color:var(--border);border-bottom-color:var(--surface-0);color:var(--text-primary);font-weight:500;margin-bottom:-1px;z-index:1}
+.tab-add{color:var(--text-muted);font-size:20px;padding:4px 12px;cursor:pointer;border-radius:6px 6px 0 0;background:none;border:none;line-height:1;font-family:var(--font-sans)}
+.tab-add:hover{background:var(--surface-1);color:var(--text-primary)}
+.content{flex:1;padding:16px;overflow-y:auto;max-width:1100px;width:100%;margin:0 auto}
+.sch-hdr{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;display:flex;gap:16px;flex-wrap:wrap}
+.fg{display:flex;flex-direction:column;gap:4px;min-width:150px;flex:1}
+.fl{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+.fi{font-size:14px;padding:9px 11px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);width:100%;font-family:var(--font-sans)}
+.fi:focus{outline:none;border-color:var(--border-accent);box-shadow:0 0 0 3px var(--bg-accent)}
+textarea.fi{resize:vertical;min-height:68px;line-height:1.5}
+.nights{display:flex;flex-direction:column;gap:14px}
+.night-card{border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--surface-2)}
+.night-hdr{background:var(--surface-1);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sel{font-size:13px;padding:8px 9px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);font-family:var(--font-sans)}
+.sel:focus{outline:none;border-color:var(--border-accent)}
+.inp{font-size:13px;padding:8px 9px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);width:100%;font-family:var(--font-sans)}
+.inp:focus{outline:none;border-color:var(--border-accent)}
+.night-acts{margin-left:auto;display:flex;gap:6px;align-items:center}
+.bti{background:none;border:none;padding:6px 8px;border-radius:var(--radius);cursor:pointer;color:var(--text-secondary);font-size:17px;line-height:1}
+.bti:hover{background:var(--surface-0);color:var(--text-primary)}
+.bti.d:hover{background:var(--bg-danger);color:var(--text-danger)}
+.status-bar{display:flex;align-items:center;gap:20px;padding:9px 14px;background:var(--surface-0);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.status-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary)}
+.tog{width:40px;height:23px;border-radius:12px;position:relative;cursor:pointer;border:none;transition:background 0.15s;flex-shrink:0}
+.tog.off{background:var(--border-stronger)}
+.tog.on-green{background:#3d8b40}
+.tog.on-blue{background:#1a3a5c}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:17px;height:17px;background:#fff;border-radius:50%;transition:transform 0.15s;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.tog.on-green::after,.tog.on-blue::after{transform:translateX(17px)}
+.status-badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:10px}
+.sb-open{background:#dcfce7;color:#166534}
+.sb-closed{background:#fee2e2;color:#991b1b}
+.rows-area{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.row-entry{border-radius:8px;border-left:5px solid #ccc;background:var(--surface-0);border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden}
+.row-top{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border)}
+.row-half{padding:10px 12px;display:flex;flex-direction:column;gap:7px}
+.row-half+.row-half{border-left:1px solid var(--border)}
+.row-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:10px 12px;background:var(--surface-1)}
+.half-label{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
+.half-fields{display:flex;flex-direction:column;gap:6px}
+.row-delete-bar{display:flex;justify-content:flex-end;padding:5px 10px;background:var(--surface-1);border-top:1px solid var(--border)}
+.add-row-btn{background:none;border:1px dashed var(--border);border-radius:8px;padding:10px;cursor:pointer;color:var(--text-muted);font-size:13px;width:100%;text-align:center;font-family:var(--font-sans)}
+.add-row-btn:hover{background:var(--surface-1);color:var(--text-primary);border-style:solid}
+.weekend-card{background:var(--surface-2);border:1px solid var(--border-accent);border-radius:10px;padding:12px 14px}
+.weekend-lbl{font-size:11px;font-weight:600;color:var(--text-accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.wk-inp{font-size:13px;padding:9px 11px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);width:100%;resize:vertical;min-height:54px;line-height:1.5;font-family:var(--font-sans)}
+.wk-inp:focus{outline:none;border-color:var(--border-accent)}
+.bottom-bar{background:var(--surface-2);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;position:sticky;bottom:0}
+.btn{padding:9px 15px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-primary);display:flex;align-items:center;gap:6px;font-family:var(--font-sans)}
+.btn:hover{background:var(--surface-1)}
+.btn.pri{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
+.btn.pri:hover{background:#14304f}
+.empty-st{text-align:center;padding:40px;color:var(--text-muted)}
+.empty-st i{font-size:40px;display:block;margin-bottom:10px;opacity:0.35}
+.legend{margin-top:16px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.legend-grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-secondary)}
+.legend-swatch{width:11px;height:22px;border-radius:3px;flex-shrink:0}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal{background:var(--surface-2);border-radius:14px;border:1px solid var(--border);width:100%;max-width:800px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column}
+.mhdr{padding:15px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.mclose{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:22px;padding:2px 7px;border-radius:var(--radius)}
+.mclose:hover{background:var(--surface-1)}
+.mbody{padding:18px;overflow-y:auto;flex:1}
+.mfoot{padding:13px 18px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center}
+.settings-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0;overflow-x:auto}
+.stab{padding:8px 14px;font-size:13px;border:none;background:none;cursor:pointer;color:var(--text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;font-family:var(--font-sans)}
+.stab:hover{color:var(--text-primary)}
+.stab.active{color:var(--text-primary);font-weight:500;border-bottom-color:#1a3a5c}
+.list-editor{background:var(--surface-1);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.list-editor-hdr{padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.list-editor-hdr-title{font-weight:500;font-size:14px;flex:1}
+.list-editor-hdr-count{font-size:12px;color:var(--text-muted)}
+.list-items{max-height:300px;overflow-y:auto}
+.list-item{display:flex;align-items:center;gap:8px;padding:8px 13px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.list-item:last-child{border-bottom:none}
+.list-item:hover{background:var(--surface-1)}
+.list-item-text{flex:1;font-size:13px}
+.list-item-edit{font-size:13px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);flex:1;font-family:var(--font-sans)}
+.list-item-edit:focus{outline:none;border-color:var(--border-accent)}
+.list-add-row{display:flex;gap:7px;padding:11px 13px;background:var(--surface-1);border-top:1px solid var(--border)}
+.list-add-inp{font-size:13px;padding:8px 11px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);flex:1;font-family:var(--font-sans)}
+.list-add-inp:focus{outline:none;border-color:var(--border-accent)}
+.btn-sm{padding:7px 12px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-primary);display:flex;align-items:center;gap:5px;white-space:nowrap;font-family:var(--font-sans)}
+.btn-sm:hover{background:var(--surface-1)}
+.btn-sm.pri{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
+.btn-sm.pri:hover{background:#14304f}
+.btn-sm.danger{color:var(--text-danger);border-color:var(--border-danger)}
+.btn-sm.danger:hover{background:var(--bg-danger)}
+.settings-note{font-size:12px;color:var(--text-muted);margin-bottom:14px;padding:10px 13px;background:var(--surface-1);border-radius:8px;border:1px solid var(--border);line-height:1.5}
+.dress-editor{display:flex;flex-direction:column;gap:9px}
+.dress-item-card{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;gap:10px;padding:11px 14px;border-left:5px solid #ccc}
+.dress-item-card:hover{background:var(--surface-1)}
+.dress-name{font-size:14px;font-weight:500;flex:1}
+.dress-color-wrap{display:flex;align-items:center;gap:8px}
+.dress-color-label{font-size:12px;color:var(--text-muted)}
+.color-picker{width:38px;height:38px;border:1px solid var(--border);border-radius:7px;cursor:pointer;padding:2px;background:none}
+.dress-edit-inp{font-size:14px;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);flex:1;font-family:var(--font-sans)}
+.dress-edit-inp:focus{outline:none;border-color:var(--border-accent)}
+.dress-add-row{display:flex;gap:9px;padding:13px 0 4px;align-items:center;border-top:1px solid var(--border);margin-top:6px;flex-wrap:wrap}
+/* Print styles */
+@media print {
+  .hdr,.tabs,.bottom-bar,.no-print{display:none!important}
+  body{background:#fff;color:#000}
+  .content{padding:0;max-width:100%}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="hdr">
+    <div class="hdr-logo">
+      <i class="ti ti-plane" style="color:#fff;font-size:20px"></i>
+    </div>
+    <div>
+      <div class="hdr-title">1015 (Horsham) Squadron</div>
+      <div class="hdr-sub">Training Schedule Builder</div>
+    </div>
+    <div class="hdr-acts">
+      <button class="btn" onclick="showSettings('dress')"><i class="ti ti-settings"></i> Lists</button>
+      <button class="btn" onclick="showArchive()"><i class="ti ti-archive"></i> Archive</button>
+      <button class="btn pri" onclick="showPrint()"><i class="ti ti-printer"></i> Print / PDF</button>
+    </div>
+  </div>
+  <div class="tabs" id="tabs-bar"></div>
+  <div class="content" id="main-content"></div>
+  <div class="bottom-bar no-print">
+    <button class="btn" onclick="addNight()"><i class="ti ti-plus"></i> Add parade night</button>
+    <button class="btn" onclick="addWeekend()"><i class="ti ti-calendar-event"></i> Add w/end note</button>
+    <div style="margin-left:auto;font-size:12px;color:var(--text-muted)" id="save-status">All changes saved</div>
+  </div>
+</div>
+<div id="print-overlay" style="display:none"></div>
+<div id="archive-overlay" style="display:none"></div>
+<div id="settings-overlay" style="display:none"></div>
+
+<script>
+const DEFAULT_LISTS={
+  groups:['Recruits','Leading','Senior','Master','A Flight','B Flight','C Flight','D of E','Green Power','Band','All','Drill Team','BTEC Cadets','Leading/Senior/Master','First Class','01/26 Intake','SNCOs','TT1','TT2','TT3','TT4'],
+  instructors:['Sgt McLennan','Sgt Rayner','TBA','OC','FS Hopkins','CI Turner','CI Coshan','CWO Booth','CI Landells','Sgt Miclea','FS Middleton','CI Cekel','Recruit Training Team','All Staff','TBC','SNCOs'],
+  locations:['Main Hall','Drill Square','MT Sheds','Drill Hall','Front Classroom','Shooting Range','Staff Room','TBA','Drill Hall Side Room','Field','SIM Room','Parade Square','TBC','Outside MT Sheds','Various','Outdoors'],
+  days:['Tuesday','Thursday','Saturday','Sunday','Monday','Wednesday','Friday'],
+  dates:['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','18th','19th','20th','21st','22nd','23rd','24th','25th','26th','27th','28th','29th','30th','31st']
+};
+const DEFAULT_DRESS=[
+  {name:'Wedgewoods (No 2 SD)',color:'#9DC3E6'},
+  {name:'Working Blues (No 2C)',color:'#0070C0'},
+  {name:'MTP (No 3A)',color:'#70AD47'},
+  {name:'Sports Kit',color:'#FFC000'},
+  {name:'Mess Dress',color:'#7030A0'},
+  {name:'Coveralls (Recruits)',color:'#888888'},
+  {name:'TBD',color:'#cccccc'},
+];
+function genId(){return Math.random().toString(36).slice(2,9)}
+function today(){const d=new Date();return`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`}
+function getDressMeta(name){return(state.dress||[]).find(d=>d.name===name)||{name,color:'#cccccc'}}
+function blankRow(){return{id:genId(),group:'All',dress:(state.dress&&state.dress[1])?state.dress[1].name:'Working Blues (No 2C)',first:'',firstInstructor:'',firstLocation:'',second:'',secondInstructor:'',secondLocation:'',notes:''}}
+function blankNight(day){return{id:genId(),type:'night',day:day||'Tuesday',date:'',standDown:false,storesOpen:true,simOpen:false,rows:[blankRow()]}}
+function blankWeekend(){return{id:genId(),type:'weekend',note:''}}
+function defaultSchedule(name){return{id:genId(),name:name||'New month',objectives:'',events:'',nights:[],notes:'',created:today()}}
+let state={schedules:[],activeId:null,lists:JSON.parse(JSON.stringify(DEFAULT_LISTS)),dress:JSON.parse(JSON.stringify(DEFAULT_DRESS))};
+let settingsTab='dress';
+function loadState(){
+  try{const s=localStorage.getItem('sqn1015v5');if(s)state=JSON.parse(s);}catch(e){}
+  if(!state.lists)state.lists=JSON.parse(JSON.stringify(DEFAULT_LISTS));
+  if(!state.dress||!state.dress.length)state.dress=JSON.parse(JSON.stringify(DEFAULT_DRESS));
+  Object.keys(DEFAULT_LISTS).forEach(k=>{if(!state.lists[k])state.lists[k]=[...DEFAULT_LISTS[k]];});
+  if(!state.schedules||!state.schedules.length){
+    const s=defaultSchedule('July 2026');
+    s.objectives='End of term activities and recruit pass out';
+    s.events='Sat 5 Jul - Wing Band Training\nSun 16 Jul - Wing Parade & Review';
+    s.nights=[
+      {id:genId(),type:'night',day:'Thursday',date:'3rd',standDown:false,storesOpen:true,simOpen:false,rows:[
+        {id:genId(),group:'All',dress:'MTP (No 3A)',first:'Sports Night',firstInstructor:'All Staff',firstLocation:'Field',second:'Sports Night',secondInstructor:'All Staff',secondLocation:'Field',notes:''},
+      ]},
+      {id:genId(),type:'weekend',note:'Sat 5 Jul - Wing Band Training @ 172 Sqn'},
+      {id:genId(),type:'night',day:'Tuesday',date:'8th',standDown:false,storesOpen:true,simOpen:true,rows:[
+        {id:genId(),group:'Recruits',dress:'Working Blues (No 2C)',first:'Drill Assessments',firstInstructor:'FS Hopkins',firstLocation:'Parade Square',second:'Drill Assessments',secondInstructor:'FS Hopkins',secondLocation:'Parade Square',notes:''},
+        {id:genId(),group:'All',dress:'Working Blues (No 2C)',first:'Skills Refresher',firstInstructor:'TBC',firstLocation:'Main Hall',second:'Skills Refresher',secondInstructor:'TBC',secondLocation:'Main Hall',notes:''},
+      ]},
+    ];
+    state.schedules=[s];state.activeId=s.id;saveState();
+  }
+  if(!state.activeId&&state.schedules.length)state.activeId=state.schedules[0].id;
+  state.schedules.forEach(s=>{if(s.nights)s.nights.forEach(n=>{if(n.type==='night'){if(n.storesOpen===undefined)n.storesOpen=true;if(n.simOpen===undefined)n.simOpen=false;}});});
+}
+function saveState(){
+  try{localStorage.setItem('sqn1015v5',JSON.stringify(state));setSaveStatus('Saved '+new Date().toLocaleTimeString());}catch(e){}
+}
+function setSaveStatus(t){const el=document.getElementById('save-status');if(el)el.textContent=t;}
+function sch(){return state.schedules.find(s=>s.id===state.activeId)}
+function L(k){return state.lists[k]||[]}
+function upd(f,v){const s=sch();if(!s)return;s[f]=v;saveState();}
+function updN(nid,f,v){const s=sch();if(!s)return;const n=s.nights.find(x=>x.id===nid);if(n){n[f]=v;saveState();}}
+function updR(nid,rid,f,v){const s=sch();if(!s)return;const n=s.nights.find(x=>x.id===nid);if(!n)return;const r=n.rows.find(x=>x.id===rid);if(r){r[f]=v;saveState();}}
+function addNight(){const s=sch();if(!s)return;s.nights.push(blankNight());saveState();render();}
+function addWeekend(){const s=sch();if(!s)return;s.nights.push(blankWeekend());saveState();render();}
+function removeNight(nid){const s=sch();if(!s)return;s.nights=s.nights.filter(n=>n.id!==nid);saveState();render();}
+function addRow(nid){const s=sch();if(!s)return;const n=s.nights.find(x=>x.id===nid);if(n){n.rows.push(blankRow());saveState();render();}}
+function removeRow(nid,rid){const s=sch();if(!s)return;const n=s.nights.find(x=>x.id===nid);if(!n)return;n.rows=n.rows.filter(r=>r.id!==rid);saveState();render();}
+function renderTabs(){
+  const bar=document.getElementById('tabs-bar');bar.innerHTML='';
+  state.schedules.forEach(s=>{
+    const t=document.createElement('button');t.className='tab'+(s.id===state.activeId?' active':'');
+    t.textContent=s.name;t.onclick=()=>{state.activeId=s.id;render();};bar.appendChild(t);
+  });
+  const a=document.createElement('button');a.className='tab-add';a.innerHTML='+';a.title='New month';a.onclick=newSchedule;bar.appendChild(a);
+}
+function newSchedule(){
+  const name=prompt('Month name (e.g. August 2026):','');if(!name)return;
+  const s=defaultSchedule(name.trim());state.schedules.push(s);state.activeId=s.id;saveState();render();
+}
+function mkDressSel(val,onchange){
+  const s=document.createElement('select');s.className='sel';s.style.width='100%';
+  const blank=document.createElement('option');blank.value='';blank.textContent='— select —';s.appendChild(blank);
+  (state.dress||[]).forEach(d=>{const opt=document.createElement('option');opt.value=d.name;opt.textContent=d.name;if(d.name===val)opt.selected=true;s.appendChild(opt);});
+  if(val)s.value=val;s.oninput=e=>onchange(e.target.value);return s;
+}
+function mkSel(listKey,val,onchange,extraStyle){
+  const opts=L(listKey);const s=document.createElement('select');s.className='sel';
+  if(extraStyle)s.style.cssText=extraStyle;
+  const blank=document.createElement('option');blank.value='';blank.textContent='— select —';s.appendChild(blank);
+  opts.forEach(o=>{const opt=document.createElement('option');opt.value=o;opt.textContent=o;if(o===val)opt.selected=true;s.appendChild(opt);});
+  if(val)s.value=val;s.oninput=e=>onchange(e.target.value);return s;
+}
+function mkInp(val,onchange,ph){
+  const i=document.createElement('input');i.className='inp';i.value=val||'';i.placeholder=ph||'';i.oninput=e=>onchange(e.target.value);return i;
+}
+function mkToggle(isOn,colorClass,onchange){
+  const b=document.createElement('button');b.className='tog '+(isOn?colorClass:'off');b.onclick=()=>onchange(!isOn);return b;
+}
+function hexToRgb(hex){const r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);return r?{r:parseInt(r[1],16),g:parseInt(r[2],16),b:parseInt(r[3],16)}:null;}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function renderMain(){
+  const el=document.getElementById('main-content');el.innerHTML='';
+  const s=sch();
+  if(!s){el.innerHTML='<div class="empty-st"><i class="ti ti-calendar-off"></i>No schedule selected</div>';return;}
+  const hdr=document.createElement('div');hdr.className='sch-hdr';
+  hdr.innerHTML=`
+    <div class="fg" style="min-width:190px"><div class="fl">Schedule title</div><input class="fi" value="${esc(s.name)}" oninput="upd('name',this.value);renderTabs()" placeholder="e.g. July 2026"></div>
+    <div class="fg"><div class="fl">Objectives</div><textarea class="fi" oninput="upd('objectives',this.value)" placeholder="Monthly objectives...">${esc(s.objectives||'')}</textarea></div>
+    <div class="fg"><div class="fl">External events</div><textarea class="fi" oninput="upd('events',this.value)" placeholder="Weekend events, courses...">${esc(s.events||'')}</textarea></div>`;
+  el.appendChild(hdr);
+  if(!s.nights.length){
+    const em=document.createElement('div');em.className='empty-st';em.innerHTML='<i class="ti ti-calendar-plus"></i><br>No parade nights yet — use the buttons below';el.appendChild(em);
+  } else {
+    const nights=document.createElement('div');nights.className='nights';
+    s.nights.forEach(n=>{
+      if(n.type==='weekend'){
+        const wk=document.createElement('div');wk.className='weekend-card';
+        const lbl=document.createElement('div');lbl.className='weekend-lbl';lbl.innerHTML='<i class="ti ti-calendar-event"></i> Weekend / External Activity';
+        const row=document.createElement('div');row.style.cssText='display:flex;gap:8px;align-items:flex-start';
+        const t=document.createElement('textarea');t.className='wk-inp';t.value=n.note||'';t.placeholder='e.g. Sat 12 Jul - Wing Parade @ RAF Cranwell';t.oninput=e=>updN(n.id,'note',e.target.value);
+        const del=document.createElement('button');del.className='bti d';del.innerHTML='<i class="ti ti-trash"></i>';del.onclick=()=>removeNight(n.id);
+        row.appendChild(t);row.appendChild(del);wk.appendChild(lbl);wk.appendChild(row);nights.appendChild(wk);return;
+      }
+      const card=document.createElement('div');card.className='night-card';
+      const nhdr=document.createElement('div');nhdr.className='night-hdr';
+      const daysel=mkSel('days',n.day,v=>updN(n.id,'day',v),'font-weight:600;width:120px;font-size:14px;padding:8px 9px');
+      const datesel=mkSel('dates',n.date,v=>updN(n.id,'date',v),'width:82px;font-size:14px;padding:8px 9px');
+      const sdDiv=document.createElement('div');sdDiv.style.cssText='display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text-secondary)';
+      const sdTog=document.createElement('button');sdTog.className='tog '+(n.standDown?'on-blue':'off');sdTog.onclick=()=>{updN(n.id,'standDown',!n.standDown);render();};
+      sdDiv.appendChild(sdTog);sdDiv.appendChild(Object.assign(document.createElement('span'),{textContent:'Stand down'}));
+      const acts=document.createElement('div');acts.className='night-acts';
+      const addR=document.createElement('button');addR.className='bti';addR.style.cssText='font-size:13px;padding:6px 11px;border:1px solid var(--border);border-radius:var(--radius)';
+      addR.innerHTML='<i class="ti ti-plus"></i> Add row';addR.onclick=()=>addRow(n.id);
+      const delN=document.createElement('button');delN.className='bti d';delN.innerHTML='<i class="ti ti-trash"></i>';delN.onclick=()=>removeNight(n.id);
+      acts.appendChild(addR);acts.appendChild(delN);nhdr.appendChild(daysel);nhdr.appendChild(datesel);nhdr.appendChild(sdDiv);nhdr.appendChild(acts);card.appendChild(nhdr);
+      if(n.standDown){
+        const sd=document.createElement('div');sd.style.cssText='padding:14px 16px;font-size:14px;color:var(--text-muted);font-style:italic';sd.textContent='Squadron stand down';card.appendChild(sd);nights.appendChild(card);return;
+      }
+      const statusBar=document.createElement('div');statusBar.className='status-bar';
+      const stDiv=document.createElement('div');stDiv.className='status-item';stDiv.innerHTML='<i class="ti ti-package" style="font-size:16px"></i><strong>Stores</strong>';
+      const stTog=mkToggle(n.storesOpen,'on-green',v=>{updN(n.id,'storesOpen',v);render();});
+      const stBadge=document.createElement('span');stBadge.className='status-badge '+(n.storesOpen?'sb-open':'sb-closed');stBadge.textContent=n.storesOpen?'Open':'Closed';
+      stDiv.appendChild(stTog);stDiv.appendChild(stBadge);
+      const simDiv=document.createElement('div');simDiv.className='status-item';simDiv.innerHTML='<i class="ti ti-device-gamepad" style="font-size:16px"></i><strong>Flight Sim</strong>';
+      const simTog=mkToggle(n.simOpen,'on-blue',v=>{updN(n.id,'simOpen',v);render();});
+      const simBadge=document.createElement('span');simBadge.className='status-badge '+(n.simOpen?'sb-open':'sb-closed');simBadge.textContent=n.simOpen?'Open':'Closed';
+      simDiv.appendChild(simTog);simDiv.appendChild(simBadge);statusBar.appendChild(stDiv);statusBar.appendChild(simDiv);card.appendChild(statusBar);
+      const rowsArea=document.createElement('div');rowsArea.className='rows-area';
+      n.rows.forEach(r=>{
+        const dm=getDressMeta(r.dress);const row=document.createElement('div');row.className='row-entry';row.style.borderLeftColor=dm.color||'#ccc';
+        const meta=document.createElement('div');meta.className='row-meta';
+        const rgb=hexToRgb(dm.color||'#ccc');if(rgb)meta.style.background=`rgba(${rgb.r},${rgb.g},${rgb.b},0.07)`;
+        const gW=document.createElement('div');gW.appendChild(Object.assign(document.createElement('div'),{className:'half-label',textContent:'Group / flight'}));gW.appendChild(mkSel('groups',r.group,v=>{updR(n.id,r.id,'group',v);render();},'width:100%'));
+        const dW=document.createElement('div');dW.appendChild(Object.assign(document.createElement('div'),{className:'half-label',textContent:'Dress'}));dW.appendChild(mkDressSel(r.dress,v=>{updR(n.id,r.id,'dress',v);render();}));
+        const nW=document.createElement('div');nW.appendChild(Object.assign(document.createElement('div'),{className:'half-label',textContent:'Notes'}));nW.appendChild(mkInp(r.notes,v=>updR(n.id,r.id,'notes',v),'Any notes...'));
+        meta.appendChild(gW);meta.appendChild(dW);meta.appendChild(nW);row.appendChild(meta);
+        const top=document.createElement('div');top.className='row-top';
+        const h1=document.createElement('div');h1.className='row-half';h1.appendChild(Object.assign(document.createElement('div'),{className:'half-label',textContent:'1st half — activity'}));
+        const f1=document.createElement('div');f1.className='half-fields';const a1=mkInp(r.first,v=>updR(n.id,r.id,'first',v),'Activity description...');a1.style.cssText='font-size:14px;padding:9px 10px';
+        const i1=document.createElement('div');i1.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:7px';i1.appendChild(mkSel('instructors',r.firstInstructor,v=>updR(n.id,r.id,'firstInstructor',v),'width:100%'));i1.appendChild(mkSel('locations',r.firstLocation,v=>updR(n.id,r.id,'firstLocation',v),'width:100%'));
+        f1.appendChild(a1);f1.appendChild(i1);h1.appendChild(f1);
+        const h2=document.createElement('div');h2.className='row-half';h2.appendChild(Object.assign(document.createElement('div'),{className:'half-label',textContent:'2nd half — activity'}));
+        const f2=document.createElement('div');f2.className='half-fields';const a2=mkInp(r.second,v=>updR(n.id,r.id,'second',v),'Activity description...');a2.style.cssText='font-size:14px;padding:9px 10px';
+        const i2=document.createElement('div');i2.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:7px';i2.appendChild(mkSel('instructors',r.secondInstructor,v=>updR(n.id,r.id,'secondInstructor',v),'width:100%'));i2.appendChild(mkSel('locations',r.secondLocation,v=>updR(n.id,r.id,'secondLocation',v),'width:100%'));
+        f2.appendChild(a2);f2.appendChild(i2);h2.appendChild(f2);
+        top.appendChild(h1);top.appendChild(h2);row.appendChild(top);
+        const db=document.createElement('div');db.className='row-delete-bar';const del=document.createElement('button');del.className='bti d';del.style.cssText='font-size:12px;padding:4px 9px;display:flex;align-items:center;gap:4px;color:var(--text-muted)';del.innerHTML='<i class="ti ti-trash"></i> Remove row';del.onclick=()=>removeRow(n.id,r.id);db.appendChild(del);row.appendChild(db);rowsArea.appendChild(row);
+      });
+      const arb=document.createElement('button');arb.className='add-row-btn';arb.innerHTML='<i class="ti ti-plus"></i> Add group / flight row';arb.onclick=()=>addRow(n.id);rowsArea.appendChild(arb);card.appendChild(rowsArea);nights.appendChild(card);
+    });
+    el.appendChild(nights);
+  }
+  const legend=document.createElement('div');legend.className='legend';
+  const lgrid=document.createElement('div');lgrid.className='legend-grid';
+  (state.dress||[]).forEach(d=>{const item=document.createElement('div');item.className='legend-item';item.innerHTML=`<div class="legend-swatch" style="background:${esc(d.color)}"></div>${esc(d.name)}`;lgrid.appendChild(item);});
+  legend.innerHTML=`<div class="fl"><i class="ti ti-palette"></i> Dress colour key</div>`;legend.appendChild(lgrid);
+  const notesSection=document.createElement('div');notesSection.style.cssText='margin-top:16px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px 16px';
+  notesSection.innerHTML=`<div class="fl" style="margin-bottom:8px"><i class="ti ti-notes"></i> Monthly notes</div><textarea class="fi" style="min-height:80px" oninput="upd('notes',this.value)" placeholder="Additional notes, reminders...">${esc(s.notes||'')}</textarea>`;
+  el.appendChild(legend);el.appendChild(notesSection);
+}
+function render(){renderTabs();renderMain();}
+function showSettings(tab){
+  settingsTab=tab||'dress';
+  const ol=document.getElementById('settings-overlay');
+  ol.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px';
+  ol.innerHTML='';
+  const modal=document.createElement('div');modal.className='modal';
+  modal.innerHTML=`<div class="mhdr"><i class="ti ti-settings" style="font-size:18px;color:var(--text-accent)"></i><span style="font-weight:500;font-size:15px">Edit dropdown lists</span><button class="mclose" onclick="closeSettings()"><i class="ti ti-x"></i></button></div><div class="mbody" id="settings-body"></div><div class="mfoot"><button class="btn" onclick="resetAllLists()"><i class="ti ti-refresh"></i> Reset to defaults</button><button class="btn pri" onclick="closeSettings()"><i class="ti ti-check"></i> Done</button></div>`;
+  ol.appendChild(modal);renderSettingsBody();
+}
+function renderSettingsBody(){
+  const body=document.getElementById('settings-body');if(!body)return;
+  const tabs=document.createElement('div');tabs.className='settings-tabs';
+  [['dress','Dress codes','ti-shirt'],['instructors','Instructors','ti-user'],['locations','Locations','ti-map-pin'],['groups','Groups / flights','ti-users']].forEach(([key,label,icon])=>{
+    const t=document.createElement('button');t.className='stab'+(settingsTab===key?' active':'');t.innerHTML=`<i class="ti ${icon}"></i> ${label}`;t.onclick=()=>{settingsTab=key;renderSettingsBody();};tabs.appendChild(t);
+  });
+  body.innerHTML='';body.appendChild(tabs);
+  if(settingsTab==='dress')renderDressEditor(body);else renderListEditor(body,settingsTab);
+}
+function renderDressEditor(body){
+  const wrap=document.createElement('div');
+  const note=document.createElement('div');note.className='settings-note';note.innerHTML='<i class="ti ti-info-circle"></i> Click the colour swatch to change a dress code colour. Changes update the schedule immediately.';wrap.appendChild(note);
+  const list=document.createElement('div');list.className='dress-editor';
+  (state.dress||[]).forEach((d,idx)=>{
+    const card=document.createElement('div');card.className='dress-item-card';card.style.borderLeftColor=d.color;
+    const swatch=document.createElement('div');swatch.style.cssText=`width:22px;height:34px;border-radius:5px;background:${d.color};flex-shrink:0`;
+    const name=document.createElement('div');name.className='dress-name';name.textContent=d.name;
+    const colorWrap=document.createElement('div');colorWrap.className='dress-color-wrap';
+    const colorLabel=document.createElement('span');colorLabel.className='dress-color-label';colorLabel.textContent='Colour';
+    const picker=document.createElement('input');picker.type='color';picker.value=d.color;picker.className='color-picker';picker.title='Click to change colour';
+    picker.oninput=e=>{state.dress[idx].color=e.target.value;card.style.borderLeftColor=e.target.value;swatch.style.background=e.target.value;saveState();render();};
+    colorWrap.appendChild(colorLabel);colorWrap.appendChild(picker);
+    const editBtn=document.createElement('button');editBtn.className='btn-sm';editBtn.style.padding='5px 9px';editBtn.innerHTML='<i class="ti ti-edit"></i>';editBtn.onclick=()=>startDressEdit(idx,card,name,editBtn);
+    const delBtn=document.createElement('button');delBtn.className='btn-sm danger';delBtn.style.padding='5px 9px';delBtn.innerHTML='<i class="ti ti-trash"></i>';delBtn.onclick=()=>{if(!confirm(`Remove "${d.name}"?`))return;state.dress.splice(idx,1);saveState();renderSettingsBody();render();};
+    card.appendChild(swatch);card.appendChild(name);card.appendChild(colorWrap);card.appendChild(editBtn);card.appendChild(delBtn);list.appendChild(card);
+  });
+  const addSection=document.createElement('div');addSection.className='dress-add-row';
+  const addInp=document.createElement('input');addInp.className='list-add-inp';addInp.placeholder='New dress code name...';addInp.id='dress-add-inp';addInp.addEventListener('keydown',e=>{if(e.key==='Enter')addDressCode();});
+  const addColor=document.createElement('input');addColor.type='color';addColor.value='#4472C4';addColor.className='color-picker';addColor.id='dress-add-color';addColor.title='Pick colour';
+  const addColorLabel=document.createElement('span');addColorLabel.className='dress-color-label';addColorLabel.textContent='Colour';
+  const addBtn=document.createElement('button');addBtn.className='btn-sm pri';addBtn.innerHTML='<i class="ti ti-plus"></i> Add dress code';addBtn.onclick=addDressCode;addInp.addEventListener('keydown',e=>{if(e.key==='Enter')addDressCode();});
+  addSection.appendChild(addInp);addSection.appendChild(addColorLabel);addSection.appendChild(addColor);addSection.appendChild(addBtn);
+  wrap.appendChild(list);wrap.appendChild(addSection);body.appendChild(wrap);
+}
+function startDressEdit(idx,card,nameEl,editBtn){
+  const current=state.dress[idx].name;nameEl.style.display='none';editBtn.style.display='none';
+  const inp=document.createElement('input');inp.className='dress-edit-inp';inp.value=current;inp.style.flex='1';
+  const saveBtn=document.createElement('button');saveBtn.className='btn-sm pri';saveBtn.style.padding='5px 11px';saveBtn.innerHTML='<i class="ti ti-check"></i> Save';
+  const cancelBtn=document.createElement('button');cancelBtn.className='btn-sm';cancelBtn.style.padding='5px 9px';cancelBtn.innerHTML='<i class="ti ti-x"></i>';
+  const doSave=()=>{const v=inp.value.trim();if(!v)return;state.dress[idx].name=v;saveState();renderSettingsBody();render();};
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')doSave();if(e.key==='Escape')renderSettingsBody();});
+  saveBtn.onclick=doSave;cancelBtn.onclick=()=>renderSettingsBody();
+  card.appendChild(inp);card.appendChild(saveBtn);card.appendChild(cancelBtn);inp.focus();inp.select();
+}
+function addDressCode(){
+  const inp=document.getElementById('dress-add-inp');const col=document.getElementById('dress-add-color');if(!inp||!col)return;
+  const v=inp.value.trim();if(!v)return;state.dress.push({name:v,color:col.value});saveState();renderSettingsBody();render();inp.value='';
+}
+function renderListEditor(body,key){
+  const labels={instructors:'Instructors',locations:'Locations',groups:'Groups / flights'};
+  const icons={instructors:'ti-user',locations:'ti-map-pin',groups:'ti-users'};
+  const items=L(key);
+  const note=document.createElement('div');note.className='settings-note';note.innerHTML=`<i class="ti ti-info-circle"></i> Changes apply immediately to all dropdowns in the schedule.`;body.appendChild(note);
+  const box=document.createElement('div');box.className='list-editor';
+  const lhdr=document.createElement('div');lhdr.className='list-editor-hdr';lhdr.innerHTML=`<i class="ti ${icons[key]||'ti-list'}" style="font-size:16px;color:var(--text-muted)"></i><span class="list-editor-hdr-title">${labels[key]||key}</span><span class="list-editor-hdr-count">${items.length} entries</span>`;box.appendChild(lhdr);
+  const listEl=document.createElement('div');listEl.className='list-items';listEl.id=`list-${key}`;listEl.style.maxHeight='320px';
+  items.forEach((item,idx)=>listEl.appendChild(makeListItem(key,item,idx)));box.appendChild(listEl);
+  const addRow=document.createElement('div');addRow.className='list-add-row';
+  const addInp=document.createElement('input');addInp.className='list-add-inp';addInp.placeholder='Add new entry...';addInp.id=`add-inp-${key}`;addInp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addListItem(key);}});
+  const addBtn=document.createElement('button');addBtn.className='btn-sm pri';addBtn.innerHTML='<i class="ti ti-plus"></i> Add';addBtn.onclick=()=>addListItem(key);
+  addRow.appendChild(addInp);addRow.appendChild(addBtn);box.appendChild(addRow);body.appendChild(box);
+}
+function makeListItem(key,item,idx){
+  const div=document.createElement('div');div.className='list-item';
+  const span=document.createElement('span');span.className='list-item-text';span.textContent=item;
+  const editBtn=document.createElement('button');editBtn.className='btn-sm';editBtn.style.padding='4px 9px';editBtn.innerHTML='<i class="ti ti-edit"></i>';editBtn.onclick=()=>startListEdit(key,item,idx,div,span,editBtn);
+  const delBtn=document.createElement('button');delBtn.className='btn-sm danger';delBtn.style.padding='4px 9px';delBtn.innerHTML='<i class="ti ti-trash"></i>';delBtn.onclick=()=>removeListItem(key,idx);
+  div.appendChild(span);div.appendChild(editBtn);div.appendChild(delBtn);return div;
+}
+function startListEdit(key,item,idx,div,span,editBtn){
+  span.style.display='none';editBtn.style.display='none';
+  const inp=document.createElement('input');inp.className='list-item-edit';inp.value=item;
+  const saveBtn=document.createElement('button');saveBtn.className='btn-sm pri';saveBtn.style.padding='4px 11px';saveBtn.innerHTML='<i class="ti ti-check"></i> Save';
+  const cancelBtn=document.createElement('button');cancelBtn.className='btn-sm';cancelBtn.style.padding='4px 9px';cancelBtn.innerHTML='<i class="ti ti-x"></i>';
+  const doSave=()=>{const v=inp.value.trim();if(!v)return;state.lists[key][idx]=v;saveState();renderSettingsBody();render();};
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')doSave();if(e.key==='Escape')renderSettingsBody();});
+  saveBtn.onclick=doSave;cancelBtn.onclick=()=>renderSettingsBody();
+  div.appendChild(inp);div.appendChild(saveBtn);div.appendChild(cancelBtn);inp.focus();inp.select();
+}
+function addListItem(key){
+  const inp=document.getElementById(`add-inp-${key}`);if(!inp)return;const v=inp.value.trim();if(!v)return;
+  if(!state.lists[key].includes(v)){state.lists[key].push(v);saveState();renderSettingsBody();render();}
+  else{inp.style.borderColor='var(--border-danger)';setTimeout(()=>{inp.style.borderColor='';},1200);}
+  inp.value='';inp.focus();
+}
+function removeListItem(key,idx){if(!confirm(`Remove "${state.lists[key][idx]}"?`))return;state.lists[key].splice(idx,1);saveState();renderSettingsBody();render();}
+function resetAllLists(){if(!confirm('Reset all lists and dress codes to defaults?'))return;state.lists=JSON.parse(JSON.stringify(DEFAULT_LISTS));state.dress=JSON.parse(JSON.stringify(DEFAULT_DRESS));saveState();renderSettingsBody();render();}
+function closeSettings(){document.getElementById('settings-overlay').style.display='none';}
+function showPrint(){
+  const s=sch();if(!s)return;
+  const ol=document.getElementById('print-overlay');
+  ol.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px';
+  ol.innerHTML='';
+  const modal=document.createElement('div');modal.className='modal';
+  modal.innerHTML=`<div class="mhdr"><i class="ti ti-printer" style="font-size:18px;color:var(--text-accent)"></i><span style="font-weight:500;font-size:15px">Print preview — ${esc(s.name)}</span><button class="mclose" onclick="closePrint()"><i class="ti ti-x"></i></button></div><div class="mbody" id="print-body"></div><div class="mfoot"><button class="btn pri" onclick="doPrint()"><i class="ti ti-printer"></i> Print / Save as PDF</button><button class="btn" onclick="closePrint()">Close</button><span style="font-size:12px;color:var(--text-muted);margin-left:6px">Use browser Print → Save as PDF</span></div>`;
+  ol.appendChild(modal);modal.querySelector('#print-body').innerHTML=buildPrint(s);
+}
+function buildPrint(s){
+  let h=`<div id="pcontent" style="background:#fff;color:#000;padding:20px;border-radius:8px;font-family:Arial,sans-serif;font-size:11px;border:1px solid #ddd">`;
+  h+=`<div style="font-size:16px;font-weight:700;text-align:center;color:#1a3a5c;border-bottom:2px solid #1a3a5c;padding-bottom:8px;margin-bottom:6px">1015 (Horsham) Squadron — ${esc(s.name)} Training Programme</div>`;
+  if(s.objectives||s.events){h+=`<div style="background:#f0f4f8;border-left:3px solid #1a3a5c;padding:6px 10px;margin-bottom:10px;font-size:10px">`;if(s.objectives)h+=`<strong style="color:#1a3a5c;font-size:8px;text-transform:uppercase;display:block">Objectives</strong>${esc(s.objectives)} `;if(s.events)h+=`<strong style="color:#1a3a5c;font-size:8px;text-transform:uppercase;display:block">External Events</strong>${esc(s.events).replace(/\n/g,' | ')}`;h+=`</div>`;}
+  h+=`<table style="width:100%;border-collapse:collapse;font-size:9px;margin-bottom:10px"><thead><tr style="background:#1a3a5c"><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Day</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Date</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Group</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Dress</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">1st Half</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Instructor</th><th style="color:#fff;padding:4px 5px;font-size:8px"></th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">2nd Half</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Instructor</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Notes</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Stores</th><th style="color:#fff;padding:4px 5px;text-align:left;font-size:8px">Sim</th></tr></thead><tbody>`;
+  s.nights.forEach(n=>{
+    if(n.type==='weekend'){if(n.note)h+=`<tr><td colspan="12"><div style="background:#fff8e6;border:0.5px solid #f0c040;padding:3px 7px;font-size:9px;color:#7a5900"><b>Weekend:</b> ${esc(n.note).replace(/\n/g,' | ')}</div></td></tr>`;return;}
+    if(n.standDown){h+=`<tr><td style="font-weight:700;color:#1a3a5c;padding:4px 5px;border-bottom:0.5px solid #e0e0e0">${esc(n.day)}</td><td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0">${esc(n.date)}</td><td colspan="10" style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;color:#aaa;font-style:italic">Squadron stand down</td></tr>`;return;}
+    if(!n.rows||!n.rows.length)return;
+    const stTxt=n.storesOpen?'Open':'Closed';const simTxt=n.simOpen?'Open':'Closed';
+    n.rows.forEach((r,i)=>{
+      const dm=getDressMeta(r.dress);
+      h+=`<tr style="${dm.color?`border-left:3px solid ${dm.color}`:''}">`;
+      if(i===0){h+=`<td style="font-weight:700;color:#1a3a5c;padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top" rowspan="${n.rows.length}">${esc(n.day)}</td><td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top" rowspan="${n.rows.length}">${esc(n.date)}</td>`;}
+      h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top"><b>${esc(r.group)}</b></td>`;
+      h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top;font-size:8px;${dm.color?`color:${dm.color};font-weight:600`:''}">${esc(r.dress)}</td>`;
+      h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top">${esc(r.first)}${r.firstLocation?`<br><span style="font-size:7px;color:#888">${esc(r.firstLocation)}</span>`:''}</td>`;
+      h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top;font-size:8px">${esc(r.firstInstructor)}</td>`;
+      h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top;text-align:center;color:#bbb">—</td>`;
+      h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top">${esc(r.second)}${r.secondLocation?`<br><span style="font-size:7px;color:#888">${esc(r.secondLocation)}</span>`:''}</td>`;
+      h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top;font-size:8px">${esc(r.secondInstructor)}</td>`;
+      h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top;font-size:8px">${esc(r.notes)}</td>`;
+      if(i===0){h+=`<td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top;font-size:8px;font-weight:600;${n.storesOpen?'color:#166534':'color:#991b1b'}" rowspan="${n.rows.length}">${stTxt}</td><td style="padding:4px 5px;border-bottom:0.5px solid #e0e0e0;vertical-align:top;font-size:8px;font-weight:600;${n.simOpen?'color:#166534':'color:#991b1b'}" rowspan="${n.rows.length}">${simTxt}</td>`;}
+      h+=`</tr>`;
+    });
+  });
+  h+=`</tbody></table>`;
+  if(s.notes)h+=`<div style="background:#f0f4f8;padding:8px;border-radius:4px;font-size:9px;margin-top:8px"><strong style="color:#1a3a5c;display:block;font-size:8px;text-transform:uppercase;margin-bottom:3px">Notes</strong>${esc(s.notes).replace(/\n/g,'<br>')}</div>`;
+  h+=`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:0.5px solid #ddd"><b style="color:#1a3a5c;font-size:8px;text-transform:uppercase;display:block;width:100%;margin-bottom:3px">Dress key</b>`;
+  (state.dress||[]).forEach(d=>{h+=`<div style="font-size:8px;display:flex;align-items:center;gap:3px"><span style="width:7px;height:12px;border-radius:1px;display:inline-block;background:${esc(d.color)}"></span>${esc(d.name)}</div>`;});
+  h+=`</div><div style="margin-top:10px;font-size:8px;color:#aaa;text-align:right">Printed ${new Date().toLocaleDateString('en-GB')} · 1015 (Horsham) Squadron RAFAC</div></div>`;
+  return h;
+}
+function doPrint(){
+  const content=document.getElementById('pcontent');if(!content)return;
+  const w=window.open('','_blank','width=960,height=740');
+  w.document.write(`<!DOCTYPE html><html><head><title>1015 Sqn — Training Programme</title><style>*{box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:10px;margin:16px;color:#000}@media print{body{margin:6px}}</style></head><body>${content.outerHTML}<script>window.onload=()=>window.print()<\/script></body></html>`);
+  w.document.close();
+}
+function closePrint(){document.getElementById('print-overlay').style.display='none';}
+function showArchive(){
+  const ol=document.getElementById('archive-overlay');
+  ol.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px';
+  ol.innerHTML='';
+  const modal=document.createElement('div');modal.className='modal';
+  modal.innerHTML=`<div class="mhdr"><i class="ti ti-archive" style="font-size:18px;color:var(--text-accent)"></i><span style="font-weight:500;font-size:15px">All schedules (${state.schedules.length})</span><button class="mclose" onclick="closeArchive()"><i class="ti ti-x"></i></button></div><div style="padding:16px;overflow-y:auto;flex:1" id="arch-list"></div>`;
+  ol.appendChild(modal);
+  const list=modal.querySelector('#arch-list');
+  if(!state.schedules.length){list.innerHTML='<div class="empty-st">No schedules yet</div>';return;}
+  [...state.schedules].reverse().forEach(s=>{
+    const active=s.id===state.activeId;
+    const item=document.createElement('div');item.style.cssText='background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px';
+    item.innerHTML=`<i class="ti ti-calendar" style="font-size:22px;color:var(--text-muted)"></i><div style="flex:1"><div style="font-weight:500;font-size:14px">${esc(s.name)}${active?' <span style="font-size:10px;padding:2px 8px;background:var(--bg-success);color:var(--text-success);border-radius:10px;font-weight:600">Current</span>':''}</div><div style="font-size:12px;color:var(--text-muted)">Created ${esc(s.created||'')} · ${(s.nights||[]).filter(n=>n.type==='night').length} parade nights</div></div><button class="btn" onclick="loadSch('${s.id}')">Open</button>${!active?`<button class="btn" style="color:var(--text-danger)" onclick="deleteSch('${s.id}')"><i class="ti ti-trash"></i></button>`:''}`;
+    list.appendChild(item);
+  });
+}
+function loadSch(id){state.activeId=id;saveState();closeArchive();render();}
+function deleteSch(id){if(!confirm('Delete this schedule permanently?'))return;state.schedules=state.schedules.filter(s=>s.id!==id);if(state.activeId===id)state.activeId=state.schedules.length?state.schedules[0].id:null;saveState();showArchive();render();}
+function closeArchive(){document.getElementById('archive-overlay').style.display='none';}
+loadState();render();
+</script>
+</body>
+</html>
